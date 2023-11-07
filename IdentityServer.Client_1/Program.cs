@@ -1,6 +1,24 @@
+using Microsoft.Extensions.DependencyInjection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = "Cookies";
+    options.DefaultChallengeScheme = "oidc";
+
+}).AddCookie("Cookies").AddOpenIdConnect("oidc", opts =>
+{
+    opts.SignInScheme = "Cookies";
+    opts.Authority = "https://localhost:7148";
+    opts.ClientId = "Client1-Mvc";
+    opts.ClientSecret = "secret";
+    opts.ResponseType = "code id_token";
+});
+
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

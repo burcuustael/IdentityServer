@@ -58,15 +58,22 @@ namespace IdentityServer.AuthServer
                 AllowedGrantTypes=GrantTypes.ClientCredentials,
                 AllowedScopes={"api1.read","api2.write","api2.update"}
             },
-
             new Client()
             {
                 ClientId="Client1-Mvc",
+                RequirePkce=false,
                 ClientName="Client1 app mvc uygulaması",
                 ClientSecrets = new[]{new Secret("secret".Sha256())},
                 AllowedGrantTypes=GrantTypes.Hybrid,
-                RedirectUris=new List<string>{"https://localhost:7265/sign-oidc"},
-                AllowedScopes={IdentityServerConstants.StandardScopes.OpenId,IdentityServerConstants.StandardScopes.Profile}    
+                RedirectUris=new List<string>{"https://localhost:7265/signin-oidc"},
+                PostLogoutRedirectUris=new List<string>{"https://localhost:7265/signout-callback-oidc"},
+                AllowedScopes={IdentityServerConstants.StandardScopes.OpenId,IdentityServerConstants.StandardScopes.Profile, "api1.read",IdentityServerConstants.StandardScopes.OfflineAccess,"CountryAndCity"},
+                AccessTokenLifetime=2*60*60,
+                AllowOfflineAccess=true,
+                RefreshTokenUsage =TokenUsage.ReUse,
+                RefreshTokenExpiration=TokenExpiration.Absolute,
+                AbsoluteRefreshTokenLifetime=(int)(DateTime.Now.AddDays(60)-DateTime.Now).TotalSeconds,
+                RequireConsent=true
             }
         };
         }
@@ -77,22 +84,26 @@ namespace IdentityServer.AuthServer
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
+                new IdentityResource(){Name="CountryAndCity",DisplayName="Country And City",Description="Kullanıcının ülke ve şehir bilgisi", UserClaims=new[]{"country","city"}}
             };
         }
 
         public static IEnumerable<TestUser> GetUsers()
         {
             return new List<TestUser>()
-            { 
+            {
                 new TestUser{SubjectId="1",Username="burcus",Password="password",Claims=new List<Claim>(){
                 new Claim("given_name","Burcu"),
-                new Claim("family_name","Ustael")}
-                },
-
-                 new TestUser{SubjectId="2",Username="dora",Password="password",Claims=new List<Claim>(){
+                new Claim("family_name","Ustael"),
+                new Claim("country","Türkiye"),
+                new Claim("city","Artvin")
+                }},
+                new TestUser{SubjectId="2",Username="dora",Password="password",Claims=new List<Claim>(){
                 new Claim("given_name","Burak"),
-                new Claim("family_name","Ustael")}
-                }
+                new Claim("family_name","Ustael"),
+                new Claim("country","Türkiye"),
+                new Claim("city","Artvin")
+                }}
             };
         }
     }

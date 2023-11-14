@@ -67,13 +67,30 @@ namespace IdentityServer.AuthServer
                 AllowedGrantTypes=GrantTypes.Hybrid,
                 RedirectUris=new List<string>{"https://localhost:7265/signin-oidc"},
                 PostLogoutRedirectUris=new List<string>{"https://localhost:7265/signout-callback-oidc"},
-                AllowedScopes={IdentityServerConstants.StandardScopes.OpenId,IdentityServerConstants.StandardScopes.Profile, "api1.read",IdentityServerConstants.StandardScopes.OfflineAccess,"CountryAndCity"},
+                AllowedScopes={IdentityServerConstants.StandardScopes.OpenId,IdentityServerConstants.StandardScopes.Profile, "api1.read",IdentityServerConstants.StandardScopes.OfflineAccess,"CountryAndCity","Roles"},
                 AccessTokenLifetime=2*60*60,
                 AllowOfflineAccess=true,
                 RefreshTokenUsage =TokenUsage.ReUse,
                 RefreshTokenExpiration=TokenExpiration.Absolute,
                 AbsoluteRefreshTokenLifetime=(int)(DateTime.Now.AddDays(60)-DateTime.Now).TotalSeconds,
-                RequireConsent=true
+                RequireConsent=false
+            },
+            new Client()
+            {
+                ClientId="Client2-Mvc",
+                RequirePkce=false,
+                ClientName="Client2 app mvc uygulaması",
+                ClientSecrets = new[]{new Secret("secret".Sha256())},
+                AllowedGrantTypes=GrantTypes.Hybrid,
+                RedirectUris=new List<string>{"https://localhost:7245/signin-oidc"},
+                PostLogoutRedirectUris=new List<string>{"https://localhost:7245/signout-callback-oidc"},
+                AllowedScopes={IdentityServerConstants.StandardScopes.OpenId,IdentityServerConstants.StandardScopes.Profile, "api1.read",IdentityServerConstants.StandardScopes.OfflineAccess,"CountryAndCity","Roles"},
+                AccessTokenLifetime=2*60*60,
+                AllowOfflineAccess=true,
+                RefreshTokenUsage =TokenUsage.ReUse,
+                RefreshTokenExpiration=TokenExpiration.Absolute,
+                AbsoluteRefreshTokenLifetime=(int)(DateTime.Now.AddDays(60)-DateTime.Now).TotalSeconds,
+                RequireConsent=false
             }
         };
         }
@@ -84,7 +101,8 @@ namespace IdentityServer.AuthServer
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
-                new IdentityResource(){Name="CountryAndCity",DisplayName="Country And City",Description="Kullanıcının ülke ve şehir bilgisi", UserClaims=new[]{"country","city"}}
+                new IdentityResource(){Name="CountryAndCity",DisplayName="Country And City",Description="Kullanıcının ülke ve şehir bilgisi", UserClaims=new[]{"country","city"}},
+                new IdentityResource(){Name="Roles",DisplayName="Roles",Description="Kullanıcı rolleri",UserClaims=new[]{"role"}}
             };
         }
 
@@ -96,13 +114,15 @@ namespace IdentityServer.AuthServer
                 new Claim("given_name","Burcu"),
                 new Claim("family_name","Ustael"),
                 new Claim("country","Türkiye"),
-                new Claim("city","Artvin")
+                new Claim("city","Artvin"),
+                new Claim("role","admin")
                 }},
                 new TestUser{SubjectId="2",Username="dora",Password="password",Claims=new List<Claim>(){
                 new Claim("given_name","Burak"),
                 new Claim("family_name","Ustael"),
                 new Claim("country","Türkiye"),
-                new Claim("city","Artvin")
+                new Claim("city","Artvin"),
+                new Claim("role","customer")
                 }}
             };
         }

@@ -1,4 +1,5 @@
 ﻿using IdentityServer.Client_1.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -20,6 +21,12 @@ namespace IdentityServer.Client_1.Controllers
 
         public IActionResult Privacy()
         {
+            return View();
+        }    
+        
+        public IActionResult AccessDenied(string ReturnUrl)
+        {
+            ViewBag.url=ReturnUrl;
             return View();
         }
 

@@ -19,7 +19,6 @@ namespace IdentityServer.Client_1.Controllers
 
         public IActionResult Index()
         {
-
             return View();
         }
 
@@ -69,6 +68,18 @@ namespace IdentityServer.Client_1.Controllers
             await HttpContext.SignInAsync("Cookies",authenticationResult.Principal,properties);
 
             return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles ="admin")]
+        public IActionResult AdminAction()
+        {
+            return View();
+        }
+
+        [Authorize(Roles ="admin,customer")]
+        public IActionResult CustomerAction()
+        {
+            return View();
         }
     }
 }

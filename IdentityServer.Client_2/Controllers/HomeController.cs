@@ -1,4 +1,5 @@
 ﻿using IdentityServer.Client_2.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -23,6 +24,11 @@ namespace IdentityServer.Client_2.Controllers
             return View();
         }
 
+        [Authorize]
+        public IActionResult User()
+        {
+            return View();
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

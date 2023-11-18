@@ -67,7 +67,7 @@ namespace IdentityServer.AuthServer
                 AllowedGrantTypes=GrantTypes.Hybrid,
                 RedirectUris=new List<string>{"https://localhost:7265/signin-oidc"},
                 PostLogoutRedirectUris=new List<string>{"https://localhost:7265/signout-callback-oidc"},
-                AllowedScopes={IdentityServerConstants.StandardScopes.OpenId,IdentityServerConstants.StandardScopes.Profile, "api1.read",IdentityServerConstants.StandardScopes.OfflineAccess,"CountryAndCity","Roles"},
+                AllowedScopes={ IdentityServerConstants.StandardScopes.Email,IdentityServerConstants.StandardScopes.OpenId,IdentityServerConstants.StandardScopes.Profile, "api1.read",IdentityServerConstants.StandardScopes.OfflineAccess,"CountryAndCity","Roles"},
                 AccessTokenLifetime=2*60*60,
                 AllowOfflineAccess=true,
                 RefreshTokenUsage =TokenUsage.ReUse,
@@ -99,6 +99,7 @@ namespace IdentityServer.AuthServer
         {
             return new List<IdentityResource>()
             {
+                new IdentityResources.Email(),
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
                 new IdentityResource(){Name="CountryAndCity",DisplayName="Country And City",Description="Kullanıcının ülke ve şehir bilgisi", UserClaims=new[]{"country","city"}},
